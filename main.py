@@ -57,6 +57,13 @@ orig_filtered_data = filtered_data
 # Dictionary to store radio buttons for each column
 radio_buttons = {}
 
+def get_column_name_from_unique_value(unique_value):
+    for column_name, unique_values in unique_values_dict.items():
+        if unique_value in unique_values:
+            return column_name
+    return None  # Return None if the unique value is not found in any column
+
+
 # Function to update the plot based on the selected filter
 def update_plot(label):
     global filtered_data
@@ -65,8 +72,11 @@ def update_plot(label):
         for column_name, radio_button in radio_buttons.items():
             if isinstance(radio_button, RadioButtons) and radio_button.value_selected != 'None':
                 print(f'---filtering with {column_name} for selected {radio_button.value_selected}')
+                column_name = get_column_name_from_unique_value(radio_button.value_selected)
                 column_idx = columns.index(column_name)
                 filtered_data = [row for row in filtered_data if row[column_idx] == radio_button.value_selected]
+            else:
+                print(f'---not filtering with {column_name} for selected {radio_button.value_selected}')
     else:
         filtered_data = [row for row in orig_filtered_data]
 
