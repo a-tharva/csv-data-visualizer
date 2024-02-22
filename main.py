@@ -84,7 +84,8 @@ def update_plot(label):
         # Plot the pie chart
         if not value_counts:
             continue
-        patches, texts = axs[i].pie(value_counts.values(), labels=value_counts.keys(), startangle=140)
+        print(f'--drawing chart with {value_counts.values()} and lables {value_counts.keys()}')
+        patches, texts = axs[i].pie(value_counts.values(), startangle=140)
         axs[i].set_title(f"Column '{column_name}'")
         # Add legend with percentages
         legend_labels = [f"{label} ({value_counts[label] * 100 / sum(value_counts.values()):.1f}%)"
