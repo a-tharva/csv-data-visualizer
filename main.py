@@ -80,6 +80,8 @@ def update_plot(label):
     else:
         filtered_data = [row for row in orig_filtered_data]
 
+    choices = []
+    height = 0
     # Plot pie charts and create/update radio buttons
     for i, idx in enumerate(columns_to_plot_indices):
         column_name, unique_values = sorted_unique_values[idx]
@@ -104,26 +106,32 @@ def update_plot(label):
 
         # Get the position of the current pie chart
         pos = axs[i].get_position()
+        height += pos.height
         # Create/update radio buttons for filtering by unique values
-        choices = ['None'] + list(value_counts.keys())
-        if column_name not in radio_buttons:
-            rax = fig.add_axes([pos.x1 + 0.01, pos.y0, 0.1, pos.height])
+        choices += list(value_counts.keys())
             
-            radio = RadioButtons(rax, choices)
-            radio.set_active(choices.index('None'))  # Select 'None' by default
-            radio.on_clicked(lambda column_name=column_name: filter_by_value(column_name))
-            # radio.on_clicked(filter_by_value(column_name))
-            radio_buttons[column_name] = radio
-        else:
-            pass
-            # radio_buttons[column_name].labels = ['None'] + list(value_counts.keys())
-            # radio_buttons[column_name].set_active(choices.index('None'))
-            
+    choices += ['None']
+    render_buttons(choices, height)
 
     # Adjust layout
     plt.tight_layout()
     # Update the plot
     plt.draw()
+
+def render_buttons(choices: list, height: int) -> None:
+    if column_name not in radio_buttons:
+        rax = fig.add_axes([0.02, 0.01, 0.1, height/2])
+        
+        radio = RadioButtons(rax, choices)
+        radio.set_active(choices.index('None'))  # Select 'None' by default
+        radio.on_clicked(lambda column_name=column_name: filter_by_value(column_name))
+        # radio.on_clicked(filter_by_value(column_name))
+        radio_buttons[column_name] = radio
+    else:
+        pass
+        # radio_buttons[column_name].labels = ['None'] + list(value_counts.keys())
+        # radio_buttons[column_name].set_active(choices.index('None'))
+
 
 # Function to filter data by selected unique value
 def filter_by_value(column_name):
@@ -136,7 +144,8 @@ def filter_by_value(column_name):
     pass
 
 # Create radio buttons for 'Filter' and 'No Filter'
-rax = plt.axes([0.05, 0.4, 0.1, 0.15])
+# left, bottom, width, height values
+rax = plt.axes([0.02, 0.8, 0.1, 0.15])
 radio = RadioButtons(rax, ['No Filter','Filter'])
 radio.on_clicked(update_plot)
 
