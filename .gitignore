@@ -160,4 +160,4 @@ cython_debug/
 #.idea/
 
 # Data for testing
-data.csv
+*.csv

@@ -4,7 +4,7 @@ import csv
 import matplotlib.pyplot as plt
 from matplotlib.widgets import RadioButtons
 
-csv_file_path = "data.csv"
+csv_file_path = input('Enter path to csv file: ')
 
 
 unique_values_dict = {}
@@ -100,7 +100,7 @@ def update_plot(label):
         patches, texts = axs[i].pie(value_counts.values(), startangle=140)
         axs[i].set_title(f"Column '{column_name}'")
         # Add legend with percentages
-        legend_labels = [f"{label} ({value_counts[label] * 100 / sum(value_counts.values()):.1f}%)"
+        legend_labels = [f"{label} ({value_counts[label] * 100 / sum(value_counts.values()):.1f}%) - {value_counts[label]}"
                          for label in value_counts.keys()]
         axs[i].legend(patches, legend_labels, loc="center left", bbox_to_anchor=(1, 0, 0.5, 1))
 
